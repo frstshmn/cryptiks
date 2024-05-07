@@ -170,7 +170,7 @@
                         <td class="small" data-sort="{{ $order['price'] }}">{{ $order['price'] }}</td>
                         <td class="small" data-sort="{{ $order['qty'] }}">{{ $order['qty'] }} ({{ $order['quoteQty'] }})</td>
                         <td class="small" data-sort="{{ $order['commission'] }}">{{ $order['commission'] }} ({{$order['commissionAsset']}})</td>
-                        <td class="small" data-sort="{{ $order['time'] }}">{{ date('Y-m-d H:i:s', $order['time']/1000) }}</td>
+                        <td class="small" data-sort="{{ $order['time'] }}">{{ date('d M Y H:i:s', $order['time']/1000) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -214,8 +214,8 @@
                 datasets: [{
                     label: 'Прибуток',
                     data: {!! $graph['profit']['data'] !!},
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: '#d4edda',
+                    borderColor: '#155724',
                     borderWidth: 1
                 }]
             },

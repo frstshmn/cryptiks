@@ -65,8 +65,8 @@ class OrderController extends Controller
             $labels = [];
             $data = [];
             $current_profit = 0;
-            for($i = 0; $i < count($result); $i++) {
-                $labels[] = date('Y-m-d H:i:s', $result[$i]['time']/1000);
+            for($i = count($result)-1; $i >= 0; $i--) {
+                $labels[] = date('d M Y H:i:s', $result[$i]['time']/1000);
                 if ($result[$i]['isBuyer']) {
                     $current_profit += $result[$i]['quoteQty'];
                 } else {
