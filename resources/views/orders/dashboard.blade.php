@@ -97,7 +97,7 @@
             </small>
         </form>
         <div class="profile">
-
+             Привіт, {{ Auth::user()->name }}!
         </div>
     </div>
     <div class="row">
@@ -140,7 +140,6 @@
                         </div>
                     </div>
                 @endforeach
-                </table>
             </div>
         </div>
         <div class="col-9">
@@ -158,16 +157,16 @@
                 </tr>
                 @foreach($orders as $order)
                     <tr>
-                        <td class="small">{{ $order['symbol'] }}</td>
+                        <td class="small" data-sort="1">{{ $order['symbol'] }}</td>
                         @if($order['isBuyer'])
-                            <td class="small"><span class="operationType no-revert" style="color: darkgreen; font-weight: bold">Купівля</span></td>
+                            <td class="small" data-sort="1"><span class="operationType no-revert" style="color: darkgreen; font-weight: bold">Купівля</span></td>
                         @else
-                            <td class="small"><span class="operationType no-revert" style="color: darkred; font-weight: bold">Продаж</span></td>
+                            <td class="small" data-sort="0"><span class="operationType no-revert" style="color: darkred; font-weight: bold">Продаж</span></td>
                         @endif
-                        <td class="small">{{ $order['price'] }}</td>
-                        <td class="small">{{ $order['qty'] }} ({{ $order['quoteQty'] }})</td>
-                        <td class="small">{{ $order['commission'] }} ({{$order['commissionAsset']}})</td>
-                        <td class="small">{{ date('Y-m-d H:i:s', $order['time']/1000) }}</td>
+                        <td class="small" data-sort="{{ $order['price'] }}">{{ $order['price'] }}</td>
+                        <td class="small" data-sort="{{ $order['qty'] }}">{{ $order['qty'] }} ({{ $order['quoteQty'] }})</td>
+                        <td class="small" data-sort="{{ $order['commission'] }}">{{ $order['commission'] }} ({{$order['commissionAsset']}})</td>
+                        <td class="small" data-sort="{{ $order['time'] }}">{{ date('Y-m-d H:i:s', $order['time']/1000) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -181,8 +180,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
     <script>
-        const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+        const getCellValue = (tr, idx) => parseFloat(tr.children[idx].dataset.sort);
 
         const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
                 v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
@@ -199,6 +199,46 @@
                 .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
                 .forEach(tr => table.appendChild(tr) );
         })));
+    </script>
+    <script>
+        const ctx = document.getElementById('profitChart');
+        let labels = {!! $graph['profit']['labels'] !!};
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Прибуток',
+                    data: {!! $graph['profit']['data'] !!},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    },
+                    x: {
+                        display: false // Add this line
+                    }
+                },
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            zeroLine: {
+                                type: 'line',
+                                yMin: 0,
+                                yMax: 0,
+                                borderColor: 'rgb(255, 0, 0)',
+                                borderWidth: 2
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </body>
 

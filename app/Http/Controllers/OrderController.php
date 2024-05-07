@@ -62,6 +62,26 @@ class OrderController extends Controller
                 }
             }
 
+            $labels = [];
+            $data = [];
+            $current_profit = 0;
+            for($i = 0; $i < count($result); $i++) {
+                $labels[] = date('Y-m-d H:i:s', $result[$i]['time']/1000);
+                if ($result[$i]['isBuyer']) {
+                    $current_profit += $result[$i]['quoteQty'];
+                } else {
+                    $current_profit -= $result[$i]['quoteQty'];
+                }
+                $data[] = $current_profit;
+            }
+
+            $graph = [
+                'profit' => [
+                    'labels' => json_encode($labels),
+                    'data' => json_encode($data)
+                ]
+            ];
+
             $styles = [
                 'isInverted' => (bool) $request->isInverted ?? false,
             ];
@@ -81,7 +101,8 @@ class OrderController extends Controller
             return view('orders.dashboard', [
                     'orders' => $result,
                     'metadata' => $metadata,
-                    'styles' => $styles
+                    'styles' => $styles,
+                    'graph' => $graph
                 ]
             );
         }
