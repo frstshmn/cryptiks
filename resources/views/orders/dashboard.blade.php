@@ -49,6 +49,10 @@
             padding: 20px;
             border-radius: 15px;
         }
+        .card.card-green {
+            background-color: #d4edda;
+            color: #155724;
+        }
         .balance-card {
             background-color: #222;
             color: #f8f9fa;
@@ -106,11 +110,11 @@
                 @include('components.balances.binance')
             </div>
             <br>
-            <div class="card">
-                <h6 class="fw-bold">Підсумок</h6>
-                <small>
-                    <div>Середній курс: {{$metadata['average_price']}}</div>
-                    <div>Прибуток: {{$metadata['sum_quoteQty']}}</div>
+            <div class="card card-green text-center shadow">
+                <h4 class="fw-bold">Підсумок</h4>
+                <small class="">
+                    <div class="mb-3">Середній курс: <br><span class="fw-bold h5 mt-2">{{$metadata['average_price']}}</span></div>
+                    <div>Прибуток: <br><span class="fw-bold h5 mt-2">{{$metadata['sum_quoteQty']}}</span></div>
                 </small>
             </div>
             <br>
