@@ -126,7 +126,7 @@
     <div class="d-flex flex-row justify-content-between">
         <h1 class="fw-bold mb-3">Ордери</h1>
         <form method="get" class="d-flex flex-row align-items-center">
-            <input class="input-header dropdown" type="text" name="currency_from" placeholder="" value="{{ $metadata['currency_from'] ?? '' }}">
+            <input class="input-header dropdown" type="text" name="currency_from" placeholder="" value="{{ $metadata['currency_from'] ?? '' }}" autocomplete="off">
             <div class="currency-options">
                 <input class="currency-option-search" placeholder="Шукати...">
                 @foreach($metadata['currencies'] as $currency)
@@ -136,7 +136,7 @@
 
             <div class="vr"></div>
 
-            <input class="input-header dropdown" type="text" name="currency_to" placeholder="" value="{{ $metadata['currency_to'] ?? '' }}">
+            <input class="input-header dropdown" type="text" name="currency_to" placeholder="" value="{{ $metadata['currency_to'] ?? '' }}" autocomplete="off">
             <div class="currency-options">
                 <input class="currency-option-search" placeholder="Шукати...">
                 @foreach($metadata['currencies'] as $currency)
