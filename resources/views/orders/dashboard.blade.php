@@ -236,11 +236,6 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.currency-options').length) {
-                $('.currency-options').hide();
-            }
-        });
         $('.currency-option').on('click', function() {
             $(this).parent().prev().val($(this).data('value'));
             $(this).parent().hide();
