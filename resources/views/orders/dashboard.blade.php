@@ -177,11 +177,10 @@
             <br>
         </div>
         <div class="col-9">
-            @include('components.orders.statistics')
-            <br>
             <nav class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Стисло</a>
                 <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Детально</a>
+                <a class="nav-link" id="nav-profit-tab" data-bs-toggle="tab" href="#nav-profit" role="tab" aria-controls="nav-profit" aria-selected="false">Графік прибутку</a>
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -240,6 +239,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="tab-pane fade" id="nav-profit" role="tabpanel" aria-labelledby="nav-profit-tab">
+                    @include('components.orders.statistics')
                 </div>
             </div>
         </div>
