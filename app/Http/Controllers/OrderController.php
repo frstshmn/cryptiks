@@ -46,6 +46,16 @@ class OrderController extends Controller
 
             $balances = $this->balances($key, $secret);
 
+            $currencies = [];
+
+            $balances_sorted = $balances['balances'];
+
+            usort($balances_sorted, array($this, 'balance_compare'));
+
+            foreach($balances_sorted as $balance) {
+                $currencies[] = $balance['asset'];
+            }
+
             $balance_from_free = 0;
             $balance_from_locked = 0;
             $balance_to_free = 0;
@@ -95,7 +105,8 @@ class OrderController extends Controller
                 'balance_from_free' => $balance_from_free,
                 'balance_to_free' => $balance_to_free,
                 'balance_from_locked' => $balance_from_locked,
-                'balance_to_locked' => $balance_to_locked
+                'balance_to_locked' => $balance_to_locked,
+                'currencies' => $currencies
             ];
 
             return view('orders.dashboard', [
@@ -142,6 +153,10 @@ class OrderController extends Controller
 
     function date_compare($element1, $element2) {
         return $element2['time'] - $element1['time'];
+    }
+
+    function balance_compare($element1, $element2) {
+        return ($element2['free'] + $element2['locked']) - ($element1['free'] + $element1['locked']);
     }
 
 }

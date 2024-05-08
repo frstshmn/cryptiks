@@ -58,7 +58,7 @@
             color: #f8f9fa;
             padding: 20px;
             border-radius: 15px 15px 0 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
         }
         .balance-card + .trade-btn {
             border: 0;
@@ -81,11 +81,44 @@
             border: 0;
             padding: 0 1em;
             font-size: 1.2em;
-            width: 90px;
+            width: 120px;
             text-align: center;
         }
         .input-header:focus {
             outline: none;
+        }
+
+        .currency-options {
+            display: none;
+            top: 70px;
+            position: absolute;
+            height: 300px;
+            width: 200px;
+            overflow: auto;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 1px solid #ddd;
+        }
+        .currency-option-search {
+            border: 0;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            padding: 0.5em 1em;
+            width: 200px;
+            margin-bottom: 5px;
+        }
+        .currency-option-search:focus {
+            outline: none;
+        }
+        .currency-option {
+            padding: 5px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .currency-option:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -93,9 +126,24 @@
     <div class="d-flex flex-row justify-content-between">
         <h1 class="fw-bold mb-3">Ордери</h1>
         <form method="get" class="d-flex flex-row align-items-center">
-            <input class="input-header" type="text" name="currency_from" placeholder="Currency From" value="{{ $metadata['currency_from'] ?? '' }}"><br>
+            <input class="input-header dropdown" type="text" name="currency_from" placeholder="" value="{{ $metadata['currency_from'] ?? '' }}">
+            <div class="currency-options">
+                <input class="currency-option-search" placeholder="Шукати...">
+                @foreach($metadata['currencies'] as $currency)
+                    <div class="currency-option" data-value="{{ $currency }}">{{ $currency }}</div>
+                @endforeach
+            </div>
+
             <div class="vr"></div>
-            <input class="input-header" type="text" name="currency_to" placeholder="Currency To" value="{{ $metadata['currency_to'] ?? '' }}"><br>
+
+            <input class="input-header dropdown" type="text" name="currency_to" placeholder="" value="{{ $metadata['currency_to'] ?? '' }}">
+            <div class="currency-options">
+                <input class="currency-option-search" placeholder="Шукати...">
+                @foreach($metadata['currencies'] as $currency)
+                    <div class="currency-option" data-value="{{ $currency }}">{{ $currency }}</div>
+                @endforeach
+            </div>
+
             <small>
                 <input class="btn btn-dark no-revert small fw-bold py-1 fs-6 ms-3 border-rounded px-3" type="submit" value="Шукати 🔍">
             </small>
@@ -118,7 +166,7 @@
                 </small>
             </div>
             <br>
-            <div class="card">
+            <div class="card shadow">
                 <h3 class="fw-bold">Статистика</h3>
                 <small>
                     <div class="me-5">Середній курс: <br>{{$metadata['average_price']}}</div>
@@ -222,6 +270,24 @@
                 .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
                 .forEach(tr => table.appendChild(tr) );
         })));
+    </script>
+    <script>
+        $('.input-header').on('focus', function() {
+            $('.currency-options').hide();
+            let selector_tooltip = $(this).next();
+            selector_tooltip.show();
+            selector_tooltip.css('left', ($(this).position().left) - 40);
+        });
+        $('.currency-option-search').on('keyup', function() {
+            let value = $(this).val().toLowerCase();
+            $(this).parent().find('.currency-option').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+        $('.currency-option').on('click', function() {
+            $(this).parent().prev().val($(this).data('value'));
+            $(this).parent().hide();
+        });
     </script>
     <script>
         const ctx = document.getElementById('profitChart');
