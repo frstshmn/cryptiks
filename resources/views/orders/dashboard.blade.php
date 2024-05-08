@@ -184,61 +184,10 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="p-4">
-                        <div class="row">
-                            <div class="col-4">
-                                <h6 class="fw-bold">Курс ({{$metadata['average_price']}})</h6>
-                            </div>
-                            <div class="col-4">
-                                <h6 class="fw-bold">Сума {{$metadata['currency_to']}} ({{$metadata['sum_quoteQty']}})</h6>
-                            </div>
-                        </div>
-                        <hr>
-                    @foreach($orders as $order)
-                            <div class="row">
-                                <div class="col-4">
-                                    <span class="small">{{ $order['price'] }}</span>
-                                </div>
-                                <div class="col-4">
-                            <span class="small">
-                                @if($order['isBuyer'])
-                                    <span style="color: darkred; font-weight: bold">- {{ $order['quoteQty']}}</span>
-                                @else
-                                    <span style="color: darkgreen; font-weight: bold">&nbsp; {{ $order['quoteQty']}}</span>
-                                @endif
-                            </span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                    @include('components.orders.orders-basic')
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <table class="table table-striped">
-                        <tbody>
-                        <tr>
-                            <th>Пара</th>
-                            <th></th>
-                            <th>Курс</th>
-                            <th>Кількість</th>
-                            <th>Комісія</th>
-                            <th>Дата</th>
-                        </tr>
-                        @foreach($orders as $order)
-                            <tr>
-                                <td class="small" data-sort="1">{{ $order['symbol'] }}</td>
-                                @if($order['isBuyer'])
-                                    <td class="small" data-sort="1"><span class="operationType no-revert" style="color: darkgreen; font-weight: bold">Купівля</span></td>
-                                @else
-                                    <td class="small" data-sort="0"><span class="operationType no-revert" style="color: darkred; font-weight: bold">Продаж</span></td>
-                                @endif
-                                <td class="small" data-sort="{{ $order['price'] }}">{{ $order['price'] }}</td>
-                                <td class="small" data-sort="{{ $order['qty'] }}">{{ $order['qty'] }} ({{ $order['quoteQty'] }})</td>
-                                <td class="small" data-sort="{{ $order['commission'] }}">{{ $order['commission'] }} ({{$order['commissionAsset']}})</td>
-                                <td class="small" data-sort="{{ $order['time'] }}">{{ date('d M Y H:i:s', $order['time']/1000) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                    @include('components.orders.orders-detailed')
                 </div>
                 <div class="tab-pane fade" id="nav-profit" role="tabpanel" aria-labelledby="nav-profit-tab">
                     @include('components.orders.statistics')
