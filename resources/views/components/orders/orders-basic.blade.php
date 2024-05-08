@@ -8,20 +8,28 @@
         </div>
     </div>
     <hr>
-    @foreach($orders as $order)
-        <div class="row">
-            <div class="col-4">
-                <span class="small">{{ $order['price'] }}</span>
+    <div class="d-flex flex-column-reverse">
+        @php($profit = 0)
+        @foreach($orders as $order)
+            <div class="row profit-calc">
+                <div class="col-4">
+                    <span class="small">{{ $order['price'] }}</span>
+                </div>
+                <div class="col-4">
+                <span class="small">
+                    @if($order['isBuyer'])
+                        @php($profit -= $order['quoteQty'])
+                        <span style="color: darkred; font-weight: bold">- {{ $order['quoteQty']}}</span>
+                    @else
+                        @php($profit += $order['quoteQty'])
+                        <span style="color: darkgreen; font-weight: bold">&nbsp; {{ $order['quoteQty']}}</span>
+                    @endif
+                    <span style="color: @if($profit < 0) darkred @else darkgreen @endif; font-weight: bold; opacity: 0.4">&nbsp; {{$profit}}</span>
+
+
+                </span>
+                </div>
             </div>
-            <div class="col-4">
-                            <span class="small">
-                                @if($order['isBuyer'])
-                                    <span style="color: darkred; font-weight: bold">- {{ $order['quoteQty']}}</span>
-                                @else
-                                    <span style="color: darkgreen; font-weight: bold">&nbsp; {{ $order['quoteQty']}}</span>
-                                @endif
-                            </span>
-            </div>
-        </div>
-    @endforeach
+        @endforeach
+    </div>
 </div>

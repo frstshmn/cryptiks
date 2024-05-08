@@ -120,6 +120,9 @@
         .currency-option:hover {
             background-color: #ddd;
         }
+        .profit-calc:hover {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body class="@if($styles['isInverted']) inverted @endif px-4 pt-4">
@@ -128,7 +131,6 @@
         <form method="get" class="d-flex flex-row align-items-center">
             <input class="input-header dropdown" type="text" name="currency_from" placeholder="" value="{{ $metadata['currency_from'] ?? '' }}" autocomplete="off">
             <div class="currency-options">
-                <input class="currency-option-search" placeholder="Шукати...">
                 @foreach($metadata['currencies'] as $currency)
                     <div class="currency-option" data-value="{{ $currency }}">{{ $currency }}</div>
                 @endforeach
@@ -138,7 +140,6 @@
 
             <input class="input-header dropdown" type="text" name="currency_to" placeholder="" value="{{ $metadata['currency_to'] ?? '' }}" autocomplete="off">
             <div class="currency-options">
-                <input class="currency-option-search" placeholder="Шукати...">
                 @foreach($metadata['currencies'] as $currency)
                     <div class="currency-option" data-value="{{ $currency }}">{{ $currency }}</div>
                 @endforeach
@@ -223,17 +224,22 @@
         })));
     </script>
     <script>
-        $('.input-header').on('focus', function() {
+        $('.input-header').on('click', function() {
             $('.currency-options').hide();
             let selector_tooltip = $(this).next();
             selector_tooltip.show();
             selector_tooltip.css('left', ($(this).position().left) - 40);
         });
-        $('.currency-option-search').on('keyup', function() {
+        $('.input-header').on('keyup', function() {
             let value = $(this).val().toLowerCase();
             $(this).parent().find('.currency-option').filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.currency-options').length) {
+                $('.currency-options').hide();
+            }
         });
         $('.currency-option').on('click', function() {
             $(this).parent().prev().val($(this).data('value'));

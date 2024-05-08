@@ -8,7 +8,7 @@
         <th>Комісія</th>
         <th>Дата</th>
     </tr>
-    @foreach($orders as $order)
+    @foreach(array_reverse($orders) as $order)
         <tr>
             <td class="small" data-sort="1">{{ $order['symbol'] }}</td>
             @if($order['isBuyer'])

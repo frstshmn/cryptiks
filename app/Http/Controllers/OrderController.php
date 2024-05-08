@@ -35,10 +35,10 @@ class OrderController extends Controller
                 $average_price += $item['price'];
                 if ($item['isBuyer']) {
                     $sum_qty += $item['qty'];
-                    $sum_quoteQty += $item['quoteQty'];
+                    $sum_quoteQty -= $item['quoteQty'];
                 } else {
                     $sum_qty -= $item['qty'];
-                    $sum_quoteQty -= $item['quoteQty'];
+                    $sum_quoteQty += $item['quoteQty'];
                 }
                 $count++;
             }
@@ -75,12 +75,12 @@ class OrderController extends Controller
             $labels = [];
             $data = [];
             $current_profit = 0;
-            for($i = count($result)-1; $i >= 0; $i--) {
-                $labels[] = date('d M Y H:i:s', $result[$i]['time']/1000);
-                if ($result[$i]['isBuyer']) {
-                    $current_profit += $result[$i]['quoteQty'];
+            foreach($result as $item) {
+                $labels[] = date('d M Y H:i:s', $item['time']/1000);
+                if ($item['isBuyer']) {
+                    $current_profit -= $item['quoteQty'];
                 } else {
-                    $current_profit -= $result[$i]['quoteQty'];
+                    $current_profit += $item['quoteQty'];
                 }
                 $data[] = $current_profit;
             }
@@ -152,7 +152,7 @@ class OrderController extends Controller
     }
 
     function date_compare($element1, $element2) {
-        return $element2['time'] - $element1['time'];
+        return $element1['time'] - $element2['time'];
     }
 
     function balance_compare($element1, $element2) {
