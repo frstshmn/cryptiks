@@ -181,6 +181,7 @@
             <nav class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Стисло</a>
                 <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Детально</a>
+                <a class="nav-link" id="nav-compare-tab" data-bs-toggle="tab" href="#nav-compare" role="tab" aria-controls="nav-compare" aria-selected="false">Порівняння</a>
                 <a class="nav-link" id="nav-profit-tab" data-bs-toggle="tab" href="#nav-profit" role="tab" aria-controls="nav-profit" aria-selected="false">Графік прибутку</a>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -189,6 +190,9 @@
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     @include('components.orders.orders-detailed')
+                </div>
+                <div class="tab-pane fade" id="nav-compare" role="tabpanel" aria-labelledby="nav-compare-tab">
+                    @include('components.orders.compare')
                 </div>
                 <div class="tab-pane fade" id="nav-profit" role="tabpanel" aria-labelledby="nav-profit-tab">
                     @include('components.orders.statistics')
@@ -262,7 +266,7 @@
                         beginAtZero: false
                     },
                     x: {
-                        display: false // Add this line
+                        display: false
                     }
                 },
                 plugins: {

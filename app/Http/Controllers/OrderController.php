@@ -119,6 +119,73 @@ class OrderController extends Controller
         }
     }
 
+    public function getAll(Request $request)
+    {
+        $user = auth()->user();
+        $key = $user->binance_api_key;
+        $secret = $user->binance_api_secret;
+
+        $url = "https://api.binance.com/api/v3/time";
+        $result = $this->request($url, $key);
+
+        $query = "timestamp=" . $result['serverTime'];
+        $sign = hash_hmac('SHA256', $query, $secret);
+
+        $balances = $this->balances($key, $secret)['balances'];
+
+        usort($balances, array($this, 'balance_compare'));
+
+        $currencies = [];
+
+        foreach($balances as $balance) {
+            if ($balance['free'] > 0 || $balance['locked'] > 0){
+                $currencies[] = $balance['asset'];
+            }
+        }
+
+        echo "<pre>";
+        print_r($currencies);
+        exit();
+
+//        $result = $this->request($url, $key);
+
+        return $result;
+    }
+
+    public function predict(Request $request)
+    {
+
+        $user = auth()->user();
+        $key = $user->binance_api_key;
+        $secret = $user->binance_api_secret;
+
+        $query =
+             "interval=5m"
+            . "&symbol=ETHUSDT";
+
+        $url = "https://api.binance.com/api/v3/klines?" . ($query);
+
+        $result = $this->request($url, $key);
+
+        echo "<pre>";
+        print_r($result);
+
+
+        $prepared_data = [];
+
+
+
+        echo "<br>";
+        print_r($result);
+
+
+        exit();
+
+//        $result = $this->request($url, $key);
+
+        return $result;
+    }
+
     private function balances($key, $secret)
     {
         $url = "https://api.binance.com/api/v3/time";
